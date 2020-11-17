@@ -3,6 +3,7 @@ import 'package:explorer/models/Traveler.dart';
 import 'package:explorer/models/User.dart';
 import 'package:explorer/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class MyHomePage extends StatelessWidget {
   @override
@@ -12,6 +13,7 @@ class MyHomePage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: buildAppBar(),
       body: HomeLayout(),
+      bottomNavigationBar: CustomBottomNavigationView(),
     );
   }
 
@@ -26,6 +28,81 @@ class MyHomePage extends StatelessWidget {
             icon: ClipOval(child: Image.asset("assets/images/profile.png")),
             onPressed: () {})
       ],
+    );
+  }
+}
+
+class CustomBottomNavigationView extends StatelessWidget {
+  const CustomBottomNavigationView({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        child: Padding(
+          padding:  EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(kDefaultPadding)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              NavigationItem(
+                icon: "assets/icons/chat.svg",
+                title: "Chat",
+                isActive: true,
+                itemPressedEvent: () { },
+              ),
+              NavigationItem(
+                icon: "assets/icons/calendar.svg",
+                title: "Events",
+                itemPressedEvent: () { },
+              ),
+              NavigationItem(
+                icon: "assets/icons/friendship.svg",
+                title: "Friends",
+                itemPressedEvent: () { },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NavigationItem extends StatelessWidget {
+  const NavigationItem({
+    Key key, @required this.icon, @required this.title,
+    this.isActive = false, @required this.itemPressedEvent
+  }) : super(key: key);
+
+  final String icon, title;
+  final bool isActive;
+  final GestureTapCallback itemPressedEvent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      height: getProportionateScreenWidth(56),
+      width: getProportionateScreenWidth(56),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [if(isActive) kDefualtShadow],
+      ),
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            icon,
+            height: 28,
+            color: kTextColor,
+          ),
+          Spacer(),
+          Text(title, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),)
+        ],
+      ),
     );
   }
 }
